@@ -18,3 +18,5 @@ def test_pseudo_instant_daq():
 
     # the mean of signals should be around the middle of 0 to 2**16
     assert abs(signals.sum()/len(signals) - 65536/2.0) < 10
+
+    pidaq.dispose()
