@@ -1,5 +1,4 @@
 import abc
-from base64 import encode
 import numpy as np
 
 import Automation.BDaq as BDaq
