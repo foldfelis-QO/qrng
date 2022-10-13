@@ -84,6 +84,7 @@ class AbstractBufferedDAQ(abc.ABC):
     def dispose(self) -> None:
         return NotImplemented
 
+
 class BufferedDAQ(AbstractBufferedDAQ):
     def init_device(self, n_signals: int) -> None:
         self.n_signals = n_signals
