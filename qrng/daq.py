@@ -9,6 +9,11 @@ class AbstractInstantDAQ(abc.ABC):
     def __init__(self, device_id: str) -> None:
         super().__init__()
         self.device_id = device_id
+        self.instant_ai_ctrl = None
+        self.ai_delta_v = 20.0/65536.0
+
+    def encode(self, i: float) -> np.uint16:
+        return np.uint16(np.floor((i+10) / self.ai_delta_v))
 
     @abc.abstractmethod
     def init_device(self) -> None:
@@ -19,13 +24,7 @@ class AbstractInstantDAQ(abc.ABC):
         return NotImplemented
 
 
-
 class InstantDAQ(AbstractInstantDAQ):
-    def __init__(self, device_id: str) -> None:
-        super().__init__(device_id)
-        self.instant_ai_ctrl = None
-        self.ai_delta_v = 20/65536
-
     def init_device(self) -> None:
         self.instant_ai_ctrl = InstantAiCtrl(self.device_id)
         self.instant_ai_ctrl.channels[0].signalType = BDaq.AiSignalType.SingleEnded
@@ -34,14 +33,10 @@ class InstantDAQ(AbstractInstantDAQ):
     def next(self) -> np.uint16:
         _, signals = self.instant_ai_ctrl.readDataF64(chStart=0, chCount=1)
 
-        return np.uint16(np.floor((signals[0]+10) / self.ai_delta_v))
+        return self.encode(signals[0])
 
 
 class PseudoInstantDAQ(AbstractInstantDAQ):
-    def __init__(self, device_id: str) -> None:
-        super().__init__(device_id)
-        self.ai_delta_v = 20/65536
-        
     def init_device(self) -> None:
         ...
 
@@ -50,4 +45,4 @@ class PseudoInstantDAQ(AbstractInstantDAQ):
         while not -10 <= rand_signal <= 10:
             rand_signal = np.random.normal(loc=0.0, scale=1.0)
 
-        return np.uint16(np.floor((rand_signal+10) / self.ai_delta_v))
+        return self.encode(rand_signal)
