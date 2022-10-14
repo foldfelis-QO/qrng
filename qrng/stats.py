@@ -2,10 +2,15 @@ import numpy as np
 from .daq import DAQ_RES
 
 
-def min_entropy(signals: np.ndarray):
-    ps = np.zeros(DAQ_RES)
+def pmf(signals: np.ndarray):
+    counts = np.zeros(DAQ_RES)
     for signal in signals:
-        ps[signal] += 1
-    ps = np.vectorize(lambda p: p/len(signals))(ps)
+        counts[signal] += 1
 
-    return np.floor(-np.log2(ps.max()))
+    probs = np.vectorize(lambda count: count/len(signals))(counts)
+
+    return probs
+
+
+def min_entropy(pmf: np.ndarray):
+    return np.floor(-np.log2(pmf.max()))
