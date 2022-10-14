@@ -1,4 +1,4 @@
-import qrng.min_entropy as h
+import qrng.stats as h
 import qrng.daq as daq
 
 
