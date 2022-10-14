@@ -6,12 +6,15 @@ from Automation.BDaq.InstantAiCtrl import InstantAiCtrl
 from Automation.BDaq.WaveformAiCtrl import WaveformAiCtrl
 
 
+DAQ_RES = 65536
+
+
 class AbstractInstantDAQ(abc.ABC):
     def __init__(self, device_id: str) -> None:
         super().__init__()
         self.device_id = device_id
         self.instant_ai_ctrl = None
-        self.ai_delta_v = 20.0/65536.0
+        self.ai_delta_v = 20.0/DAQ_RES
 
     def encode(self, signal: float) -> np.uint16:
         return np.uint16(np.floor((signal+10) / self.ai_delta_v))
@@ -65,7 +68,7 @@ class AbstractBufferedDAQ(abc.ABC):
         self.device_id = device_id
         self.waveform_ai_ctrl = None
         self.n_signals = 0
-        self.ai_delta_v = 20.0/65536.0
+        self.ai_delta_v = 20.0/DAQ_RES
 
     def encode(self, signals: list) -> np.ndarray:
         return np.vectorize(
