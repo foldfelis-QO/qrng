@@ -1,4 +1,4 @@
-import qrng.stats as h
+import qrng.stats as stats
 import qrng.daq as daq
 
 
@@ -11,4 +11,5 @@ def test_min_entropy():
 
     signals = pbdaq.next()
 
-    assert h.min_entropy(signals) == 12
+
+    assert stats.min_entropy(stats.pmf(signals)) == 12
