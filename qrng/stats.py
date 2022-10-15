@@ -13,4 +13,4 @@ def pmf(signals: np.ndarray):
 
 
 def min_entropy(pmf: np.ndarray):
-    return np.floor(-np.log2(pmf.max()))
+    return np.int64(np.floor(-np.log2(pmf.max())))

@@ -1,6 +1,7 @@
 import numpy as np
 from . import daq
 from . import stats
+from . import toeplitz
 
 
 class QSystem:
@@ -16,21 +17,18 @@ class QSystem:
         self.signals = None
         self.pmf = None
         self.min_entropy = 0
-        self.delta_signal = 0.0
+        self.encoder = None
 
     def estimate(self) -> None:
         self.bdaq.init_device(n_signals=self.n_signals_for_estimation)
         self.signals = self.bdaq.next()
         self.pmf = stats.pmf(self.signals)
         self.min_entropy = stats.min_entropy(self.pmf)
-        self.delta_signal = daq.DAQ_RES / 2**self.min_entropy
         self.bdaq.dispose()
+
+        self.encoder = toeplitz.Toeplitz((self.signals[0], self.signals[1]), daq.NBITS, self.min_entropy)
 
         self.idaq.init_device()
 
-    def encode(self, signal: np.uint16) -> np.uint16:
-        # TODO: signal = hash(signal)
-        return np.uint16(np.floor(signal / self.delta_signal))
-
-    def rand(self) -> np.uint16:
-        return self.encode(self.idaq.next())
+    def rand(self) -> int:
+        return self.encoder.hash(self.idaq.next())
