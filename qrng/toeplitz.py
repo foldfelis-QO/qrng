@@ -29,3 +29,9 @@ class Toeplitz:
     def build_matrix(self):
         for i in range(self.out_nbits):
             self.matrix[i, :] = self.token_bits[(self.in_nbits - i):(2*self.in_nbits - i)]
+
+    def hash(self, n):
+        bits = np.fromstring(np.binary_repr(n, width=self.in_nbits), dtype='S1').astype(int)
+        hash_bits = np.matmul(self.matrix, bits) % 2
+
+        return hash_bits.dot(2**np.arange(hash_bits.size)[::-1])
