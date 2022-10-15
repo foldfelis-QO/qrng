@@ -5,8 +5,8 @@ import Automation.BDaq as BDaq
 from Automation.BDaq.InstantAiCtrl import InstantAiCtrl
 from Automation.BDaq.WaveformAiCtrl import WaveformAiCtrl
 
-
-DAQ_RES = 65536
+NBITS = 16
+DAQ_RES = 2**NBITS
 
 
 class AbstractInstantDAQ(abc.ABC):
