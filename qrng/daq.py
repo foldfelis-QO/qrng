@@ -53,7 +53,7 @@ class PseudoInstantDAQ(AbstractInstantDAQ):
 
     def next(self) -> np.uint16:
         rand_signal = np.random.normal(loc=0.0, scale=1.0)
-        while not -10 <= rand_signal <= 10:
+        while not -10 <= rand_signal < 10:
             rand_signal = np.random.normal(loc=0.0, scale=1.0)
 
         return self.encode(rand_signal)
@@ -124,7 +124,7 @@ class PseudoBufferedDAQ(AbstractBufferedDAQ):
         rand_signals = np.empty(self.n_signals)
         for i in range(len(rand_signals)):
             rand_signals[i] = np.random.normal(loc=0.0, scale=1.0)
-            while not -10 <= rand_signals[i] <= 10:
+            while not -10 <= rand_signals[i] < 10:
                 rand_signals[i] = np.random.normal(loc=0.0, scale=1.0)
 
         return self.encode(rand_signals)
