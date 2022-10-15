@@ -1,4 +1,3 @@
-import numpy as np
 from . import daq
 from . import stats
 from . import toeplitz
