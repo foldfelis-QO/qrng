@@ -33,3 +33,6 @@ def test_toeplitz():
 
     for v, a in zip(toeplitz.matrix.reshape(-1), matrix_ans):
         assert v == a
+
+    assert toeplitz.hash(np.uint16(20)) == 1
+    assert toeplitz.hash(np.uint16(200)) == 10
