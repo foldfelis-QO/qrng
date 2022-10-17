@@ -1,4 +1,5 @@
 import abc
+from time import sleep
 import numpy as np
 
 import Automation.BDaq as BDaq
@@ -108,7 +109,7 @@ class BufferedDAQ(AbstractBufferedDAQ):
         self.waveform_ai_ctrl.start()
 
         result = self.waveform_ai_ctrl.getDataF64(count=self.n_signals, timeout=-1)  # timeout=-1 meaning infinite waiting
-        _, _, signals = result
+        signals = result[2]
 
         return self.encode(signals)
 
